@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/semiWhite"
+    tools:context=".ui.view.HomeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="890dp"
+            android:background="@drawable/backbround"
+            android:alpha=".2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_auto"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/autoSlider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+                android:id="@+id/worn_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:dotsColor="@color/lightBrown"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="15dp"/>
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/welcomeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="18dp"
+            android:text="Welcome"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/brown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_auto" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/grid_menu_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/welcomeText">
+
+            <include
+                android:id="@+id/include_home_menu_grid"
+                layout="@layout/home_menu_grid"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/newsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Newest Food"
+            android:textSize="18dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/brown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grid_menu_home" />
+
+        <LinearLayout
+            android:id="@+id/layout_newHoriList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/newsText">
+
+            <include
+                android:id="@+id/empty_newHoriList"
+                layout="@layout/item_empty"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/loading_newHoriList"
+                layout="@layout/item_loading"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/error_newHoriList"
+                layout="@layout/item_error"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/newHoriList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
