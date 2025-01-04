@@ -53,23 +53,31 @@ class HomeFragment : Fragment() {
 
     private fun setupGridMenu(binding: FragmentHomeBinding) {
         binding.includeHomeMenuGrid.menu1.setOnClickListener {
-            Toast.makeText(context, "Anda Klik Menu 1", Toast.LENGTH_LONG).show()
+            navigateToCategory("Main Dish")
         }
         binding.includeHomeMenuGrid.menu2.setOnClickListener {
-            Toast.makeText(context, "Anda Klik Menu 2", Toast.LENGTH_LONG).show()
+            navigateToCategory("Snacks")
         }
         binding.includeHomeMenuGrid.menu3.setOnClickListener {
-            Toast.makeText(context, "Anda Klik Menu 3", Toast.LENGTH_LONG).show()
+            navigateToCategory("Drink")
         }
         binding.includeHomeMenuGrid.menu4.setOnClickListener {
-            Toast.makeText(context, "Anda Klik Menu 4", Toast.LENGTH_LONG).show()
+            navigateToCategory("Dessert")
         }
         binding.includeHomeMenuGrid.menu5.setOnClickListener {
-            Toast.makeText(context, "Anda Klik Menu 5", Toast.LENGTH_LONG).show()
+            navigateToCategory("Traditional Food")
         }
         binding.includeHomeMenuGrid.menu6.setOnClickListener {
-            Toast.makeText(context, "Anda Klik Menu 6", Toast.LENGTH_LONG).show()
+            navigateToCategory("Healthy Food")
         }
+    }
+
+    private fun navigateToCategory(category: String) {
+        val fragment = CategoryRecipeFragment.newInstance(category)
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container_bottomnav, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupNewsHorizontal(binding: FragmentHomeBinding) {

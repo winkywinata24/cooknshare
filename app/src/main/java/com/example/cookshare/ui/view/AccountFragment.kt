@@ -45,14 +45,14 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
             when (selectedItem.name) {
                 "FAQ" -> {
-                    Toast.makeText(requireContext(), "Membuka Halaman Privacy", Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), "Membuka Halaman FAQ", Toast.LENGTH_LONG)
                         .show()
                     val intent = Intent(activity, FaqActivity::class.java)
                     startActivity(intent)
                 }
 
                 "PRIVACY POLICY" -> {
-                    Toast.makeText(requireContext(), "Membuka Halaman About", Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), "Membuka Halaman PRIVACY", Toast.LENGTH_LONG)
                         .show()
                     val intent = Intent(activity, PrivacyActivity::class.java)
                     startActivity(intent)

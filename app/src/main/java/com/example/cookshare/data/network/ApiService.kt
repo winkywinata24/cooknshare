@@ -32,4 +32,9 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("id") foodId: String
     ): Response<Unit>
+
+    @GET("food")
+    suspend fun getAllFoods(
+        @Header("Authorization") token: String
+    ): Response<FoodResponse>
 }
