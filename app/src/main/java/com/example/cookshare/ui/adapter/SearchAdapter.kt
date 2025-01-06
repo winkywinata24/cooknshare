@@ -1,23 +1,21 @@
 package com.example.cookshare.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cookshare.R
-import com.example.cookshare.data.model.SearchModel
 import com.example.cookshare.databinding.ItemSearchResultBinding
 import com.squareup.picasso.Picasso
+import android.content.Intent
+import com.example.cookshare.data.model.FoodItems
+import com.example.cookshare.ui.view.DetailRecipeActivity
 
-class SearchAdapter(private var results: List<SearchModel>) :
+class SearchAdapter(private var results: List<FoodItems>) :
     RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: ItemSearchResultBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: SearchModel) {
+        fun bind(item: FoodItems) {
             binding.foodTitle.text = item.title
-            Picasso.get()
-                .load(item.image)
-                .into(binding.foodImage)
+            Picasso.get().load(item.image).into(binding.foodImage)
         }
     }
 
@@ -27,13 +25,20 @@ class SearchAdapter(private var results: List<SearchModel>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(results[position])
+        val item = results[position]
+        holder.bind(item)
+
+        // Set click listener to navigate to DetailRecipeActivity
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, DetailRecipeActivity::class.java)
+            intent.putExtra("EXTRA_FOOD_ITEM", item) // Pass the complete FoodItems model
+            holder.itemView.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = results.size
 
-    fun updateResults(newResults: List<SearchModel>) {
-        Log.d("SearchAdapter", "updateResults called with data: $newResults")
+    fun updateResults(newResults: List<FoodItems>) {
         results = newResults
         notifyDataSetChanged()
     }

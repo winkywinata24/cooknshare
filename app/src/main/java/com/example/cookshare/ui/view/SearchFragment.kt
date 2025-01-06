@@ -115,22 +115,11 @@ class SearchFragment : Fragment() {
                         binding.emptyFood.emptyMessage.text = "No results found"
                         binding.searchResultsRecyclerView.visibility = View.GONE
                     } else {
-                        val searchResults = convertToSearchModel(foodItems)
-                        Log.d("Search", "Data diteruskan ke adapter: $searchResults")
-                        searchResultsAdapter.updateResults(searchResults)
+                        searchResultsAdapter.updateResults(foodItems)
                     }
                 }
 
             }
-        }
-    }
-
-    private fun convertToSearchModel(foodItems: List<FoodItems>): List<SearchModel> {
-        return foodItems.map {
-            SearchModel(
-                title = it.title,
-                image = it.image
-            )
         }
     }
 
