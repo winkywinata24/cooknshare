@@ -111,7 +111,6 @@ class MyRecipeFragment : Fragment() {
                     )
                     binding.foodList.adapter = adapter
                     binding.foodList.layoutManager = LinearLayoutManager(requireContext())
-
                 }
             }
         }

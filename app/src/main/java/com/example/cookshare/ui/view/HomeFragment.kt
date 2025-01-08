@@ -1,7 +1,7 @@
 package com.example.cookshare.ui.view
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookshare.R
+import com.example.cookshare.data.model.FoodItems
 import com.example.cookshare.data.network.RetrofitInstance
-import com.example.cookshare.data.repository.FoodRepository
 import com.example.cookshare.databinding.FragmentHomeBinding
-import com.example.cookshare.data.model.NewsHorizontalModel
+import com.example.cookshare.data.repository.UserFoodRepository
 import com.example.cookshare.ui.adapter.AutoSliderAdapter
 import com.example.cookshare.ui.adapter.NewsHorizontalAdapter
 import com.example.cookshare.ui.viewModel.FoodViewModel
@@ -24,10 +24,12 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val foodViewModel: FoodViewModel by lazy {
-        val repository = FoodRepository(RetrofitInstance.getSpoonacularApi())
+        val repository =
+            UserFoodRepository(RetrofitInstance.getSpoonacularApi()) // Use UserFoodRepository here
         ViewModelProvider(
             this,
-            ViewModelFactory(FoodViewModel::class.java) { FoodViewModel(repository) })[FoodViewModel::class.java]
+            ViewModelFactory(FoodViewModel::class.java) { FoodViewModel(repository) }
+        )[FoodViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -80,9 +82,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupNewsHorizontal(binding: FragmentHomeBinding) {
-        val adapter = NewsHorizontalAdapter(emptyList())
+        val adapter =
+            NewsHorizontalAdapter(emptyList()) { foodItem -> // Ganti NewsHorizontalModel dengan FoodItems
+                // Pindah ke DetailRecipeActivity saat item diklik
+                val intent = Intent(requireContext(), DetailRecipeActivity::class.java)
+                intent.putExtra("EXTRA_FOOD_ITEM", foodItem) // Kirimkan objek FoodItems
+                startActivity(intent)
+            }
 
-        foodViewModel.getFoods(requireContext())
+        binding.newHoriList.adapter = adapter
+        binding.newHoriList.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        foodViewModel.getFoodDataFromApi(requireContext(), forceRefresh = false)
+
         foodViewModel.data.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Empty -> {
@@ -91,7 +104,6 @@ class HomeFragment : Fragment() {
                     binding.errorNewHoriList.root.visibility = View.GONE
                     binding.newHoriList.visibility = View.GONE
                     binding.emptyNewHoriList.emptyMessage.text = resource.message
-                    Log.d("Food Data", "Data Kosong. (${resource.message})")
                 }
 
                 is Resource.Error -> {
@@ -100,10 +112,6 @@ class HomeFragment : Fragment() {
                     binding.errorNewHoriList.root.visibility = View.VISIBLE
                     binding.newHoriList.visibility = View.GONE
                     binding.errorNewHoriList.errorMessage.text = resource.message
-                    binding.errorNewHoriList.retryButton.setOnClickListener {
-                        foodViewModel.getFoods(requireContext(), true)
-                    }
-                    Log.d("Food Data", resource.message.toString())
                 }
 
                 is Resource.Loading -> {
@@ -111,7 +119,6 @@ class HomeFragment : Fragment() {
                     binding.loadingNewHoriList.root.visibility = View.VISIBLE
                     binding.errorNewHoriList.root.visibility = View.GONE
                     binding.newHoriList.visibility = View.GONE
-                    Log.d("Food Data", "Mohon Tunggu...")
                 }
 
                 is Resource.Success -> {
@@ -119,19 +126,26 @@ class HomeFragment : Fragment() {
                     binding.loadingNewHoriList.root.visibility = View.GONE
                     binding.errorNewHoriList.root.visibility = View.GONE
                     binding.newHoriList.visibility = View.VISIBLE
-                    Log.d("Food Data", "Data berhasil didapatkan")
-                    val newsItem = resource.data!!.mapIndexed { index, data ->
-                        NewsHorizontalModel(
-                            data.image, data.title
+
+                    val foodItems = resource.data?.items ?: emptyList()
+                    adapter.updateData(foodItems.map { foodItem ->
+                        FoodItems(
+                            _created = foodItem._created,
+                            _data_type = foodItem._data_type,
+                            _is_deleted = foodItem._is_deleted,
+                            _modified = foodItem._modified,
+                            _self_link = foodItem._self_link,
+                            _user = foodItem._user,
+                            _uuid = foodItem._uuid,
+                            title = foodItem.title,
+                            image = foodItem.image,
+                            category = foodItem.category,
+                            ingredients = foodItem.ingredients,
+                            steps = foodItem.steps
                         )
-                    }
-                    adapter.updateData(newsItem)
+                    })
                 }
             }
         }
-
-        binding.newHoriList.adapter = adapter
-        binding.newHoriList.layoutManager =
-            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
     }
 }

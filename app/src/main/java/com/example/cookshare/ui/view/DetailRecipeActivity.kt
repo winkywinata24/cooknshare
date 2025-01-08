@@ -47,8 +47,6 @@ class DetailRecipeActivity : AppCompatActivity() {
             Picasso.get().load(it.image).into(imageView)
         }
 
-
-
         // Tombol kembali
         findViewById<ImageView>(R.id.back_button).setOnClickListener {
             finish()
